@@ -1,9 +1,19 @@
 package org.example.model;
 
+import java.util.ArrayList;
+
 public class Customer {
     private int id;
-    private int age;
     private String name;
+    private int age;
+
+    public Customer (){
+    }
+
+    public Customer (String name, int age){
+        this.name = name;
+        this.age = age;
+    }
 
     public String getName() {
         return name;
@@ -33,9 +43,8 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", age=" + age +
-                ", name='" + name + '\'' +
-                '}';
+                ", name=" + name +
+                ", age=" + age  +
+                '}' + "\n";
     }
-
 }

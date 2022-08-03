@@ -1,7 +1,7 @@
 package org.example.dao;
 
 import org.example.db.DBEngine;
-import org.example.model.Product;
+import org.example.model.Order;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,27 +10,28 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-public class ProductDao implements Dao<Product> {
+public class OrderDao  implements Dao<Order> {
 
-    private static final String SELECT_QUERY = "SELECT * FROM product";
-    private static final String INSERT_INTO_SQL = "INSERT INTO product (name, price) VALUES (?, ?)";
-    private static final String UPDATE_SET = "UPDATE product SET name = ?, price = ? WHERE id = ?";
-    private static final String DELETE_FROM = "DELETE FROM product WHERE id = ?";
+    private static final String SELECT_QUERY = "SELECT * FROM order";
+    private static final String INSERT_INTO_SQL = "INSERT INTO order (foreign_customer, foreign_product) VALUES (?, ?)";
+    private static final String UPDATE_SET = "UPDATE order SET foreign_customer = ?, foreign_product = ? WHERE id = ?";
+    private static final String DELETE_FROM = "DELETE FROM order WHERE id = ?";
 
     @Override
-    public Optional<Product> get(Product product/*long id*/) {
+    public Optional<Order> get(Order order/*long id*/) {
+        //в каждом методе происходит создание statement или preparedStatement
         return Optional.empty();
     }
 
     @Override
-    public List<Product> getAll() {
+    public List<Order> getAll() {
         try {
             Statement statement = DBEngine.getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
             while (resultSet.next()){
                 System.out.println(resultSet.getInt("id") + " "
-                        + resultSet.getString("name") + " "
-                        + resultSet.getInt("price"));
+                        + resultSet.getInt("foreign_customer") + " "
+                        + resultSet.getInt("foreign_product"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,33 +40,33 @@ public class ProductDao implements Dao<Product> {
     }
 
     @Override
-    public void save(Product product) {
+    public void save(Order order) {
         try {
             PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(INSERT_INTO_SQL);
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setDouble(2, product.getPrice());
+            preparedStatement.setInt(1, order.getForeignCustomer());
+            preparedStatement.setInt(2, order.getForeignProduct());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void update(Product product/*, String[] params*/) {
+    public void update(Order order/*, String[] params*/) {
         try {
             PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(UPDATE_SET);
-            preparedStatement.setString(1, product.getName());
-            preparedStatement.setDouble(2, product.getPrice());
-            preparedStatement.setInt(3, product.getId());
+            preparedStatement.setInt(1, order.getForeignCustomer());
+            preparedStatement.setInt(2, order.getForeignProduct());
+            preparedStatement.setInt(3, order.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Product product) {
+    public void delete(Order order) {
         try {
             PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(DELETE_FROM);
-            preparedStatement.setInt(1, product.getId());
+            preparedStatement.setInt(1, order.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
