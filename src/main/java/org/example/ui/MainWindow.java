@@ -1,10 +1,14 @@
 package org.example.ui;
 
 import org.example.dao.CustomerDao;
+import org.example.db.DBEngine;
 import org.example.model.Customer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class MainWindow {
 
@@ -13,18 +17,38 @@ public class MainWindow {
     private static final String DELETE = "Удалить";
     private static final String FIND = "Найти";
     private static final String GET_ALL = "Показать всех";
+    public static final String PRODUCT = "PRODUCT";
+    public static final String CUSTOMER = "CUSTOMER";
+    public static final String ORDER = "ORDER";
 
     private JFrame frame = new JFrame();
-    private JPanel panelWindow, panelRadioButton, panelButton, panelInput;
+    private JPanel listsPanel, panelRadioButton, panelButton, panelInput;
     private JTextField fieldId, field2, field3;
     private JLabel label1, label2, label3, label4;
-    private JButton buttonSave, buttonUpdate, buttonDelete, buttonFind, buttonGetAll;
+    private CustomerBrowserPanel customerPanel;
+    private ProductPanel productPanel = new ProductPanel();
+    private OrderPanel orderPanel = new OrderPanel();
+    private JButton buttonCreate, buttonUpdate, buttonDelete, buttonFind, buttonGetAll;
     private ButtonGroup buttonGroup;
-    private JRadioButton radioButton1, radioButton2, radioButton3;
+    private CardLayout mainCardLayout;
+    private JPanel mainWindowPanel;
+    private JRadioButton customerRadioButton, productRadioButton, orderRadioButton;
     private String labelText;
     private int x;
 
-    public void go (){
+    public void show(){
+
+        ArrayList<Customer> testList = new ArrayList<>();
+        testList.add(new Customer("Dron", 10));
+        testList.add(new Customer("Yarik", 12));
+        testList.add(new Customer("Serega", 18));
+        customerPanel = new CustomerBrowserPanel(testList);
+        customerPanel.addClickListener(e -> {
+            if (e.getFirstIndex() >= 0) {
+                buttonUpdate.setEnabled(true);
+                buttonDelete.setEnabled(true);
+            }
+        });
 
         frame.setTitle("База данных");
         frame.setBounds(100,100,500,500);
@@ -32,7 +56,7 @@ public class MainWindow {
 
         labelText = "Выбирите, какие действия хотите сделать с баззой";
 
-        panelWindow = new JPanel();
+        listsPanel = new JPanel();
         panelRadioButton = new JPanel();
         panelButton = new JPanel();
         panelInput = new JPanel();
@@ -45,29 +69,30 @@ public class MainWindow {
         field2 = new JTextField();
         field3 = new JTextField();
         x = 1;
-        buttonSave = new JButton(SAVE);
+        buttonCreate = new JButton(SAVE);
         buttonUpdate = new JButton(UPDATE);
+        buttonUpdate.setEnabled(false);
         buttonDelete = new JButton(DELETE);
+        buttonDelete.setEnabled(false);
         buttonFind = new JButton(FIND);
         buttonGetAll = new JButton(GET_ALL);
 
         buttonGroup = new ButtonGroup();
-        radioButton1 = new JRadioButton("Customer");
-        radioButton2 = new JRadioButton("Product");
-        radioButton3 = new JRadioButton("Order");
-        buttonGroup.add(radioButton1);
-        buttonGroup.add(radioButton2);
-        buttonGroup.add(radioButton3);
+        customerRadioButton = new JRadioButton("Customer", true);
+        productRadioButton = new JRadioButton("Product");
+        orderRadioButton = new JRadioButton("Order");
+        buttonGroup.add(customerRadioButton);
+        buttonGroup.add(productRadioButton);
+        buttonGroup.add(orderRadioButton);
 
-        frame.getContentPane().add(panelWindow);
 
         panelRadioButton.setLayout(new FlowLayout());
-        panelRadioButton.add(radioButton1);
-        panelRadioButton.add(radioButton2);
-        panelRadioButton.add(radioButton3);
+        panelRadioButton.add(customerRadioButton);
+        panelRadioButton.add(productRadioButton);
+        panelRadioButton.add(orderRadioButton);
 
         panelButton.setLayout(new FlowLayout());
-        panelButton.add(buttonSave);
+        panelButton.add(buttonCreate);
         panelButton.add(buttonUpdate);
         panelButton.add(buttonDelete);
         panelButton.add(buttonFind);
@@ -80,106 +105,41 @@ public class MainWindow {
         panelInput.add(field2);
         panelInput.add(label3);
         panelInput.add(field3);
-        
-        panelWindow.setLayout(new BorderLayout());
-        panelWindow.add(panelRadioButton, BorderLayout.NORTH);
-        panelWindow.add(label4, BorderLayout.CENTER);
-        panelWindow.add(panelButton, BorderLayout.SOUTH);
 
-        buttonSave.addActionListener(e ->{
-            if (e.getSource()==buttonSave) {
-                if (x == 1) {
-                    panelWindow.add(panelInput, BorderLayout.CENTER);
-                    buttonDelete.setVisible(false);
-                    buttonUpdate.setVisible(false);
-                    buttonFind.setVisible(false);
-                    buttonGetAll.setVisible(false);
+        mainCardLayout = new CardLayout();
+        listsPanel.setLayout(mainCardLayout);
+        listsPanel.add(productPanel, PRODUCT);
+        listsPanel.add(customerPanel, CUSTOMER);
+        listsPanel.add(orderPanel, ORDER);
+        mainWindowPanel = new JPanel(new BorderLayout());
+        mainWindowPanel.add(panelRadioButton, BorderLayout.NORTH);
+        mainWindowPanel.add(listsPanel, BorderLayout.CENTER);
+        mainWindowPanel.add(panelButton, BorderLayout.SOUTH);
 
-                    x = 0;
-                }
-                else if (x == 0) {
-                    label4.setText(labelText);
-                    String a = field2.getText();
-                    String b = field3.getText();
-                    Customer customer = new Customer();
-                    customer.setName(a);
-                    customer.setAge(Integer.parseInt(b));
+        frame.getContentPane().add(mainWindowPanel);
 
-                    CustomerDao customerDao = new CustomerDao();
-                    customerDao.save(customer);
+        customerRadioButton.addItemListener(e -> mainCardLayout.show(listsPanel, CUSTOMER));
+        productRadioButton.addItemListener(e -> mainCardLayout.show(listsPanel, PRODUCT));
+        orderRadioButton.addItemListener(e -> mainCardLayout.show(listsPanel, ORDER));
+        buttonCreate.addActionListener(e ->{
+            Customer newCustomer = new Customer();
+            CustomerEditor customerEditor = new CustomerEditor(frame, newCustomer);
 
-                    buttonDelete.setVisible(true);
-                    buttonUpdate.setVisible(true);
-                    buttonFind.setVisible(true);
-                    buttonGetAll.setVisible(true);
-
-                    x = 1;
-                }
-            }
         });
         buttonUpdate.addActionListener(e -> {
-            if (e.getSource()==buttonUpdate){
-                if (x == 1) {
-
-                    panelWindow.add(panelInput, BorderLayout.CENTER);
-                    buttonDelete.setVisible(false);
-                    buttonSave.setVisible(false);
-                    buttonGetAll.setVisible(false);
-
-                    x = 0;
-                }
-                else if (x == 0) {
-                    label4.setText(labelText);
-                    String a = field2.getText();
-                    String b = field3.getText();
-                    String c = fieldId.getText();
-                    Customer customer = new Customer();
-                    customer.setName(a);
-                    customer.setAge(Integer.parseInt(b));
-                    customer.setId(Integer.parseInt(c));
-
-                    CustomerDao customerDao = new CustomerDao();
-                    customerDao.update(customer);
-
-                    buttonDelete.setVisible(true);
-                    buttonSave.setVisible(true);
-                    buttonGetAll.setVisible(true);
-
-                    x = 1;
-                }
+            Customer currentCustomer = customerPanel.getCurrentCustomer();
+            if (currentCustomer != null) {
+                CustomerEditor customerEditor = new CustomerEditor(frame, currentCustomer);
             }
         });
         buttonDelete.addActionListener(e -> {
-            if (e.getSource()==buttonDelete){
-                if (x == 1) {
-                    panelWindow.add(panelInput, BorderLayout.CENTER);
-                    buttonSave.setVisible(false);
-                    buttonUpdate.setVisible(false);
-                    buttonGetAll.setVisible(false);
-
-                    x = 0;
-                }
-                else if (x == 0) {
-                    label4.setText(labelText);
-                    String c = fieldId.getText();
-                    Customer customer = new Customer();
-                    customer.setId(Integer.parseInt(c));
-
-                    CustomerDao customerDao = new CustomerDao();
-                    customerDao.delete(customer);
-
-                    buttonSave.setVisible(true);
-                    buttonUpdate.setVisible(true);
-                    buttonGetAll.setVisible(true);
-                    x = 1;
-                }
-            }
+            customerPanel.deleteCurrentCustomer();
         });
         buttonFind.addActionListener(e -> {
             if (e.getSource()==buttonFind){
                 if (x == 1) {
-                    panelWindow.add(panelInput, BorderLayout.CENTER);
-                    buttonSave.setVisible(false);
+                    listsPanel.add(panelInput, BorderLayout.CENTER);
+                    buttonCreate.setVisible(false);
                     buttonUpdate.setVisible(false);
                     buttonDelete.setVisible(false);
                     buttonGetAll.setVisible(false);
@@ -194,7 +154,7 @@ public class MainWindow {
                     CustomerDao customerDao = new CustomerDao();
                     customerDao.get(customer);
 
-                    buttonSave.setVisible(true);
+                    buttonCreate.setVisible(true);
                     buttonUpdate.setVisible(true);
                     buttonDelete.setVisible(true);
                     buttonGetAll.setVisible(true);
@@ -211,6 +171,12 @@ public class MainWindow {
 
 
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                DBEngine.closeConnection();
+            }
+        });
         frame.setVisible(true);
     }
 

@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public class CustomerDao implements Dao<Customer> {
 
-    private static final String SELECT_QUERY = "SELECT * FROM customer";
-    private static final String SELECT_QUERY1 = "SELECT * FROM customer WHERE id = ?";
+    private static final String SELECT_QUERY_ALL = "SELECT * FROM customer";
+    private static final String SELECT_QUERY1_BY_ID = "SELECT * FROM customer WHERE id = ?";
     private static final String INSERT_INTO_SQL = "INSERT INTO customer (name, age) VALUES (?, ?)";
     private static final String UPDATE_SET = "UPDATE customer SET name = ?, age = ? WHERE id = ?";
     private static final String DELETE_FROM = "DELETE FROM customer WHERE id = ?";
@@ -23,7 +23,7 @@ public class CustomerDao implements Dao<Customer> {
     public Optional<Customer> get(Customer customer/*long id*/) {
 
         try {
-            PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(SELECT_QUERY1);
+            PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(SELECT_QUERY1_BY_ID);
             preparedStatement.setInt(1, customer.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -47,7 +47,7 @@ public class CustomerDao implements Dao<Customer> {
         ArrayList <Customer> pup = new ArrayList<>();
         try {
             Statement statement = DBEngine.getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
+            ResultSet resultSet = statement.executeQuery(SELECT_QUERY_ALL);
             while (resultSet.next()){
                 Customer client = new Customer();
                  client.setId(resultSet.getInt("id"));
