@@ -1,11 +1,6 @@
 package org.example;
 
-import org.example.db.DBEngine;
-import org.example.model.Customer;
 import org.example.ui.MainWindow;
-
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Test {
     /*ArrayList <Customer> pup = new ArrayList<>();
@@ -14,8 +9,9 @@ public class Test {
     }*/
 
     public static void main(String[] args) {
+
         MainWindow window = new MainWindow();
-        window.go();
+        window.show();
 
         /*for (int n = 0; n<2; n++) {
             Test test = new Test();
