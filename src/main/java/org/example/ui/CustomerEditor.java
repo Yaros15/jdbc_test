@@ -1,5 +1,6 @@
 package org.example.ui;
 
+import org.example.dao.CustomerDao;
 import org.example.model.Customer;
 
 import javax.swing.*;
@@ -9,19 +10,14 @@ public class CustomerEditor extends JDialog {
 
     private Customer customerToEdit;
 
-    private JLabel idLabel;
-    private JLabel nameLabel;
-    private JLabel ageLabel;
+    private JLabel nameLabel, ageLabel;
 
-    private JTextField idField;
-    private JTextField nameField;
-    private JTextField ageField;
+    private JTextField nameField, ageField;
 
-    private JButton okButton;
-    private JButton cancelButton;
+    private JButton createButton, updateButton, cancelButton;
 
     public CustomerEditor(JFrame frame, Customer customer) {
-        super(frame, "Customer Editor", true);
+        super(frame, "Редактор клиентов", true);
         customerToEdit = customer;
         String name = customer.getName();
         if (name != null) {
@@ -31,7 +27,7 @@ public class CustomerEditor extends JDialog {
         if (age != 0) {
             ageField.setText(String.valueOf(age));
         }
-        setSize(new Dimension(400, 400));
+        super.setBounds(150,150,300,300);
         pack();
         setVisible(true);
     }
@@ -41,28 +37,27 @@ public class CustomerEditor extends JDialog {
         JRootPane rootPane = super.createRootPane();
         rootPane.setLayout(new BorderLayout());
 
-        JPanel fieldPanel = new JPanel(new GridLayout(3,2,5,5));
-        idLabel = new JLabel("Id:");
-        nameLabel = new JLabel("Name:");
-        ageLabel = new JLabel("Age:");
+        nameLabel = new JLabel("Имя:");
+        ageLabel = new JLabel("Возраст:");
 
-        idField = new JTextField();
         nameField = new JTextField();
         ageField = new JTextField();
 
-        okButton = new JButton("Ok");
-        cancelButton = new JButton("Cancel");
-        fieldPanel.add(idLabel);
-        fieldPanel.add(idField);
+        createButton = new JButton("Создать");
+        updateButton = new JButton("Изменить");
+        cancelButton = new JButton("Закрыть");
+
+        JPanel fieldPanel = new JPanel(new GridLayout(2,2,5,5));
         fieldPanel.add(nameLabel);
         fieldPanel.add(nameField);
         fieldPanel.add(ageLabel);
         fieldPanel.add(ageField);
 
-        JPanel buttonsPanel = new JPanel(new BorderLayout());
-        buttonsPanel.add(okButton, BorderLayout.WEST);
-        buttonsPanel.add(cancelButton, BorderLayout.EAST);
-        fieldPanel.add(buttonsPanel);
+        JPanel buttonsPanel = new JPanel(new GridLayout(1,3,5,5));
+        buttonsPanel.add(createButton);
+        buttonsPanel.add(updateButton);
+        buttonsPanel.add(cancelButton);
+
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(fieldPanel, BorderLayout.CENTER);
         mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
@@ -74,7 +69,37 @@ public class CustomerEditor extends JDialog {
             }
             customerToEdit.setName(value);
         });
+
+            createButton.addActionListener(e -> {
+                if (e.getSource() == createButton) {
+                    customerToEdit.setName(nameField.getText());
+                    customerToEdit.setAge(Integer.parseInt(ageField.getText()));
+                    CustomerDao saveCustomer = new CustomerDao();
+                    saveCustomer.save(customerToEdit);
+                    super.dispose();
+                }
+                System.out.println("Customer create");
+            });
+
+            updateButton.addActionListener(e -> {
+                if (e.getSource() == updateButton){
+                    customerToEdit.setName(nameField.getText());
+                    customerToEdit.setAge(Integer.parseInt(ageField.getText()));
+                    CustomerDao saveCustomer = new CustomerDao();
+                    saveCustomer.update(customerToEdit);
+                    super.dispose();
+                }
+                System.out.println("Customer update");
+            });
+
+            cancelButton.addActionListener(e -> {
+                if (e.getSource() == cancelButton) {
+                    super.dispose();
+                }
+            });
+
         rootPane.add(mainPanel, BorderLayout.CENTER);
         return rootPane;
     }
+
 }

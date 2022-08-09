@@ -1,5 +1,6 @@
 package org.example.ui;
 
+import org.example.dao.CustomerDao;
 import org.example.model.Customer;
 
 import javax.swing.*;
@@ -39,6 +40,8 @@ public class CustomerBrowserPanel extends JPanel {
     public void deleteCurrentCustomer() {
         Customer selectedValue = customerJList.getSelectedValue();
         customerListModel.removeElement(selectedValue);
+        CustomerDao customerDelete = new CustomerDao();
+        customerDelete.delete(selectedValue);
     }
 
     public void addClickListener(ListSelectionListener listener) {
