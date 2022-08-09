@@ -1,7 +1,5 @@
 package org.example.model;
 
-import java.util.ArrayList;
-
 public class Customer {
     private int id;
     private String name;
@@ -41,7 +39,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "name=" + name +
-                ", age=" + age;
+        return "name = " + name +
+                ", age = " + age;
     }
 }

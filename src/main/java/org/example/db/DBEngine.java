@@ -11,7 +11,7 @@ public class DBEngine {
 
     private static Connection connection = null;
 
-    private DBEngine() { // лишаем возможности наследования класса
+    private DBEngine() {
     }
 
     public static Connection getConnection() {
@@ -24,8 +24,8 @@ public class DBEngine {
             try {
                 connection = DriverManager.getConnection(url, user, password);
                 System.out.println("База готова к работе");
-                initTables();
-                initData();
+                //initTables();
+                //initData();
                 /*DatabaseMetaData metadata = connection.getMetaData();
                 ResultSet resultSet;
                 resultSet = metadata.getTables(null, null, "customer", null);*/
@@ -33,18 +33,17 @@ public class DBEngine {
             } catch (SQLException e){
                 e.printStackTrace();
             }
-            // логика по подготовке коннекшена
         } else {
             return connection;
         }
-        return connection; //null;
+        return connection;
     }
 
     private static void initData() {
 
     }
 
-    private static void initTables() {
+    /*private static void initTables() {
         if (isNeedCreateTables()) {
             ClassLoader classLoader = DBEngine.class.getClassLoader();
             File file = new File(classLoader.getResource("schema.sql").getFile());
@@ -62,21 +61,21 @@ public class DBEngine {
         }
     }
 
-    private static Boolean isNeedCreateTables() {
+    /*private static Boolean isNeedCreateTables() {
         String[] tables = {"customer", "order", "product"};
         //DatabaseMetaData metadata = connection.getMetaData();
         ResultSet resultSet;
         //resultSet = metadata.getTables(null, null, "customer", null);
-        return /*resultSet == */null;
-    }
+        return resultSet == null;
+    }*/
 
     public static Connection closeConnection(){
-        /*try {
+        try {
             connection.close();
             System.out.println("База завершила работу");
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }*/
+        }
         return null;
     }
 
