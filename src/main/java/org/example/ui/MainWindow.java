@@ -5,6 +5,7 @@ import org.example.dao.OrdersDao;
 import org.example.dao.ProductDao;
 import org.example.db.DBEngine;
 import org.example.model.Customer;
+import org.example.model.Orders;
 import org.example.model.Product;
 
 import javax.swing.*;
@@ -77,8 +78,8 @@ public class MainWindow {
         buttonDelete = new JButton(DELETE);
         buttonDelete.setEnabled(false);
 
-        customerRadioButton = new JRadioButton(CUSTOMER, true);
-        productRadioButton = new JRadioButton(PRODUCT);
+        customerRadioButton = new JRadioButton(CUSTOMER);
+        productRadioButton = new JRadioButton(PRODUCT, true);
         orderRadioButton = new JRadioButton(ORDER);
 
         buttonGroup = new ButtonGroup();
@@ -113,18 +114,21 @@ public class MainWindow {
             nameListPanel = CUSTOMER;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
+            buttonCreate.setEnabled(true);
         });
         productRadioButton.addItemListener(e -> {
             mainCardLayout.show(listsPanel, PRODUCT);
             nameListPanel = PRODUCT;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
+            buttonCreate.setEnabled(true);
         });
         orderRadioButton.addItemListener(e -> {
             mainCardLayout.show(listsPanel, ORDER);
             nameListPanel = ORDER;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
+            buttonCreate.setEnabled(false);
         });
 
         buttonCreate.addActionListener(e ->{
@@ -159,6 +163,9 @@ public class MainWindow {
             }
             if (nameListPanel.equals(PRODUCT)){
                 productPanel.deleteCurrentProduct();
+            }
+            if (nameListPanel.equals(ORDER)){
+                orderPanel.deleteOrdersProduct();
             }
         });
 
