@@ -12,11 +12,10 @@ import java.util.List;
 
 public class OrdersDao implements Dao<Orders> {
 
-    private static final String SELECT_QUERY = "SELECT * FROM orders";
-            /*"SELECT customer.name, product.name, product.price FROM orders " +
+    private static final String SELECT_QUERY = "SELECT customer.name_customer, product.name_product, product.price FROM orders " +
             "JOIN customer ON customer.id = orders.customer_id" +
             "JOIN product ON product.id = orders.product_id " +
-            "ORDER BY customer.name, product.price";*/
+            "ORDER BY customer.name_customer, product.price";
     private static final String INSERT_INTO_SQL = "INSERT INTO orders (customer_id, product_id) VALUES (?, ?)";
     private static final String UPDATE_SET = "UPDATE orders SET customer_id = ?, product_id = ? WHERE id = ?";
     private static final String DELETE_FROM = "DELETE FROM orders WHERE id = ?";
@@ -29,9 +28,9 @@ public class OrdersDao implements Dao<Orders> {
             ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
             while (resultSet.next()){
                 Orders newOrders = new Orders();
-                newOrders.setId(resultSet.getInt("id"));
-                newOrders.setCustomerId(resultSet.getInt("customer_id"));
-                newOrders.setProductId(resultSet.getInt("product_id"));
+                newOrders.setCustomerName(resultSet.getString("name_customer"));
+                newOrders.setProductName(resultSet.getString("name_product"));
+                newOrders.setProductPrice(resultSet.getDouble("price"));
                 orders.add(newOrders);
             }
         } catch (SQLException e) {

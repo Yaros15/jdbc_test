@@ -13,8 +13,8 @@ import java.util.List;
 public class ProductDao implements Dao<Product> {
 
     private static final String SELECT_QUERY_ALL = "SELECT * FROM product";
-    private static final String INSERT_INTO_SQL = "INSERT INTO product (name, price) VALUES (?, ?)";
-    private static final String UPDATE_SET = "UPDATE product SET name = ?, price = ? WHERE id = ?";
+    private static final String INSERT_INTO_SQL = "INSERT INTO product (name_product, price) VALUES (?, ?)";
+    private static final String UPDATE_SET = "UPDATE product SET name_product = ?, price = ? WHERE id = ?";
     private static final String DELETE_FROM = "DELETE FROM product WHERE id = ?";
 
 
@@ -27,7 +27,7 @@ public class ProductDao implements Dao<Product> {
             while (resultSet.next()){
                 Product newProducts = new Product();
                 newProducts.setId(resultSet.getInt("id"));
-                newProducts.setName(resultSet.getString("name"));
+                newProducts.setName(resultSet.getString("name_product"));
                 newProducts.setPrice(resultSet.getInt("price"));
                 products.add(newProducts);
             }
