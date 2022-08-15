@@ -14,7 +14,7 @@ public class OrderBrowserPanel extends JPanel {
 
     private JList<Orders> ordersJList = new JList<>();
     private DefaultListModel <Orders> ordersListModel;
-    private Orders ordersProduct = null;
+    private Orders currentOrders = null;
 
     public OrderBrowserPanel (List<Orders> products){
         setLayout(new BorderLayout());
@@ -25,22 +25,22 @@ public class OrderBrowserPanel extends JPanel {
         ordersJList.addListSelectionListener(e -> {
             int selectedIndex = e.getFirstIndex();
             if (selectedIndex >= 0) {
-                ordersProduct = ordersListModel.get(selectedIndex);
+                currentOrders = ordersListModel.get(selectedIndex);
             } else {
-                ordersProduct = null;
+                currentOrders = null;
             }
         });
     }
 
-    public Orders getOrdersProduct() {
-        return ordersProduct;
+    public Orders getCurrentOrders() {
+        return currentOrders;
     }
 
     public void deleteOrdersProduct() {
-        /*Orders selectedValue = ordersJList.getSelectedValue();
+        Orders selectedValue = ordersJList.getSelectedValue();
         ordersListModel.removeElement(selectedValue);
         OrdersDao ordersDelete = new OrdersDao();
-        ordersDelete.delete(selectedValue);*/
+        ordersDelete.delete(selectedValue);
         System.out.println("Order delete");
     }
 

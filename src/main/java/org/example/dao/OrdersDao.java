@@ -14,7 +14,7 @@ public class OrdersDao implements Dao<Orders> {
 
     private static final String SELECT_QUERY = "SELECT customer.name_customer, product.name_product, product.price FROM orders " +
             "INNER JOIN customer ON customer.id = orders.customer_id " +
-            "INNER JOIN product ON product.id = orders.product_id  " +
+            "INNER JOIN product ON product.id = orders.product_id " +
             "ORDER BY customer.name_customer, product.price";
     private static final String INSERT_INTO_SQL = "INSERT INTO orders (customer_id, product_id) VALUES (?, ?)";
     private static final String UPDATE_SET = "UPDATE orders SET customer_id = ?, product_id = ? WHERE id = ?";
@@ -45,6 +45,8 @@ public class OrdersDao implements Dao<Orders> {
             PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(INSERT_INTO_SQL);
             preparedStatement.setInt(1, order.getCustomerId());
             preparedStatement.setInt(2, order.getProductId());
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,8 @@ public class OrdersDao implements Dao<Orders> {
             preparedStatement.setInt(1, order.getCustomerId());
             preparedStatement.setInt(2, order.getProductId());
             preparedStatement.setInt(3, order.getId());
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,6 +71,8 @@ public class OrdersDao implements Dao<Orders> {
         try {
             PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(DELETE_FROM);
             preparedStatement.setInt(1, order.getId());
+            preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

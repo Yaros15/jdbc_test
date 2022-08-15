@@ -10,16 +10,14 @@ public class ProductEditor extends JDialog {
 
     private Product productToEdit;
 
-    private JLabel nameLabel;
-    private JLabel priceLabel;
+    private JLabel nameLabel, priceLabel;
 
-    private JTextField nameField;
-    private JTextField priceField;
+    private JTextField nameField, priceField;
 
     private JButton createButton, updateButton, cancelButton;
 
     public ProductEditor (JFrame frame, Product product){
-        super(frame, "Редактор клиентов", true);
+        super(frame, "Редактор продуктов", true);
         productToEdit = product;
         String name = product.getName();
         if (name != null) {
@@ -29,7 +27,6 @@ public class ProductEditor extends JDialog {
         if (price != 0) {
             priceField.setText(String.valueOf(price));
         }
-        //super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.setBounds(150,150,300,300);
         pack();
         setVisible(true);
@@ -81,7 +78,6 @@ public class ProductEditor extends JDialog {
                 saveProduct.save(productToEdit);
                 super.dispose();
             }
-            System.out.println("Product create");
         });
 
         updateButton.addActionListener(e -> {
