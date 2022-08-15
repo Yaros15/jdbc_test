@@ -5,20 +5,9 @@ public class Orders {
     private int id;
     private int customerId;
     private int productId;
-    Customer customer = new Customer();
-    Product product = new Product();
-
-    public void setCustomerName (String name){
-        customer.setName(name);
-    }
-
-    public void setProductName (String product){
-        this.product.setName(product);
-    }
-
-    public void setProductPrise (double price){
-        product.setPrice(price);
-    }
+    private String customerName;
+    private String productName;
+    private double productPrice;
 
     public Orders(){
     }
@@ -52,12 +41,34 @@ public class Orders {
         this.productId = productId;
     }
 
+    public String getCustomerName (){
+        return customerName;
+    }
+
+    public void setCustomerName (String customerName){
+        this.customerName = customerName;
+    }
+
+    public String getProductName (){
+        return productName;
+    }
+
+    public void setProductName (String productName){
+        this.productName = productName;
+    }
+
+    public double getProductPrice (){
+        return productPrice;
+    }
+
+    public void setProductPrice (double productPrice){
+        this.productPrice = productPrice;
+    }
+
     public String toString() {
-        return /*"customer Id =" + customerId +
-                ", product Id = " + productId;*/
-        "customer = " + customer.getName() +
-                ", product = " + product.getName() +
-                ", price = " + product.getPrice();
+        return   "customer = " + getCustomerName() +
+                ", product = " + getProductName() +
+                ", price = " + getProductPrice();
     }
 
 }

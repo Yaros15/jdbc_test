@@ -9,33 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CustomerDao implements Dao<Customer> {
 
     private static final String SELECT_QUERY_ALL = "SELECT * FROM customer";
-    private static final String INSERT_INTO_SQL = "INSERT INTO customer (name, age) VALUES (?, ?)";
-    private static final String UPDATE_SET = "UPDATE customer SET name = ?, age = ? WHERE id = ?";
+    private static final String INSERT_INTO_SQL = "INSERT INTO customer (name_customer, age) VALUES (?, ?)";
+    private static final String UPDATE_SET = "UPDATE customer SET name_customer = ?, age = ? WHERE id = ?";
     private static final String DELETE_FROM = "DELETE FROM customer WHERE id = ?";
-
-    /*public Optional<Customer> get(Customer customer) {
-
-        try {
-            PreparedStatement preparedStatement = DBEngine.getConnection().prepareStatement(SELECT_QUERY1_BY_ID);
-            preparedStatement.setInt(1, customer.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()){
-                Customer client = new Customer();
-                client.setId(resultSet.getInt("id"));
-                client.setName(resultSet.getString("name"));
-                client.setAge(resultSet.getInt("age"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
-    }*/
 
     @Override
     public List<Customer> getAll() {
@@ -46,7 +26,7 @@ public class CustomerDao implements Dao<Customer> {
             while (resultSet.next()){
                 Customer newClient = new Customer();
                  newClient.setId(resultSet.getInt("id"));
-                 newClient.setName(resultSet.getString("name"));
+                 newClient.setName(resultSet.getString("name_customer"));
                  newClient.setAge(resultSet.getInt("age"));
                 client.add(newClient);
             }

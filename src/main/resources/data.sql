@@ -1,11 +1,11 @@
-INSERT INTO customer ('name','age')
+INSERT INTO customer ('name_customer','age')
 VALUES
     ("Declan Gentry",27),
     ("Aphrodite Abbott",43),
     ("Brennan Burch",25),
     ("Libby Chambers",40),
     ("Colorado Wilkerson",33);
-INSERT INTO product ('name', 'price')
+INSERT INTO product ('name_product', 'price')
 VALUES
     ("Apple", 200.00),
     ("Samsung", 150.00),
