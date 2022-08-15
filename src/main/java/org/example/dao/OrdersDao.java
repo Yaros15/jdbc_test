@@ -13,8 +13,8 @@ import java.util.List;
 public class OrdersDao implements Dao<Orders> {
 
     private static final String SELECT_QUERY = "SELECT customer.name_customer, product.name_product, product.price FROM orders " +
-            "JOIN customer ON customer.id = orders.customer_id" +
-            "JOIN product ON product.id = orders.product_id " +
+            "INNER JOIN customer ON customer.id = orders.customer_id " +
+            "INNER JOIN product ON product.id = orders.product_id  " +
             "ORDER BY customer.name_customer, product.price";
     private static final String INSERT_INTO_SQL = "INSERT INTO orders (customer_id, product_id) VALUES (?, ?)";
     private static final String UPDATE_SET = "UPDATE orders SET customer_id = ?, product_id = ? WHERE id = ?";
