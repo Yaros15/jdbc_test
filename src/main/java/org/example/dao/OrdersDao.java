@@ -12,7 +12,8 @@ import java.util.List;
 
 public class OrdersDao implements Dao<Orders> {
 
-    private static final String SELECT_QUERY = "SELECT customer.name_customer, product.name_product, product.price FROM orders " +
+    private static final String SELECT_QUERY = "SELECT orders.id, orders.customer_id, orders.product_id, " +
+            "customer.name_customer, product.name_product, product.price FROM orders " +
             "INNER JOIN customer ON customer.id = orders.customer_id " +
             "INNER JOIN product ON product.id = orders.product_id " +
             "ORDER BY customer.name_customer, product.price";
@@ -28,6 +29,9 @@ public class OrdersDao implements Dao<Orders> {
             ResultSet resultSet = statement.executeQuery(SELECT_QUERY);
             while (resultSet.next()){
                 Orders newOrders = new Orders();
+                newOrders.setId(resultSet.getInt("id"));
+                newOrders.setCustomerId(resultSet.getInt("customer_id"));
+                newOrders.setProductId(resultSet.getInt("product_id"));
                 newOrders.setCustomerName(resultSet.getString("name_customer"));
                 newOrders.setProductName(resultSet.getString("name_product"));
                 newOrders.setProductPrice(resultSet.getDouble("price"));

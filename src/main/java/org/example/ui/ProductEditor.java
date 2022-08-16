@@ -84,8 +84,8 @@ public class ProductEditor extends JDialog {
             if (e.getSource() == updateButton){
                 productToEdit.setName(nameField.getText());
                 productToEdit.setPrice(Integer.parseInt(priceField.getText()));
-                ProductDao saveProduct = new ProductDao();
-                saveProduct.update(productToEdit);
+                ProductDao updateProduct = new ProductDao();
+                updateProduct.update(productToEdit);
                 super.dispose();
             }
         });

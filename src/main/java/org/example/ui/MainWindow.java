@@ -114,21 +114,18 @@ public class MainWindow {
             nameListPanel = CUSTOMER;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
-            buttonCreate.setEnabled(true);
         });
         productRadioButton.addItemListener(e -> {
             mainCardLayout.show(listsPanel, PRODUCT);
             nameListPanel = PRODUCT;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
-            buttonCreate.setEnabled(true);
         });
         orderRadioButton.addItemListener(e -> {
             mainCardLayout.show(listsPanel, ORDER);
             nameListPanel = ORDER;
             buttonUpdate.setEnabled(false);
             buttonDelete.setEnabled(false);
-            buttonCreate.setEnabled(false);
         });
 
         buttonCreate.addActionListener(e ->{
@@ -139,6 +136,10 @@ public class MainWindow {
             if (nameListPanel.equals(PRODUCT)){
                 Product newProduct = new Product();
                 ProductEditor productEditor = new ProductEditor(frame, newProduct);
+            }
+            if (nameListPanel.equals(ORDER)){
+                Orders newOrders = new Orders();
+                OrderEditor ordersEditor = new OrderEditor(frame, newOrders);
             }
         });
 
@@ -153,6 +154,12 @@ public class MainWindow {
                 Product currentProduct = productPanel.getCurrentProduct();
                 if (currentProduct != null) {
                     ProductEditor productEditor = new ProductEditor(frame, currentProduct);
+                }
+            }
+            if (nameListPanel.equals(ORDER)) {
+                Orders currentOrders = new Orders();
+                if (currentOrders != null) {
+                    OrderEditor ordersEditor = new OrderEditor(frame, currentOrders);
                 }
             }
         });
