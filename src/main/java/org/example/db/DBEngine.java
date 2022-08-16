@@ -55,7 +55,6 @@ public class DBEngine {
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("Создам таблицу");
             initData();
         }
     }
@@ -79,14 +78,9 @@ public class DBEngine {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                /*String[] lineSplit = String.valueOf(scriptText).split(" ;");
-                for (String newLine : lineSplit) {
-                    System.out.println(newLine);
-                }*/
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("Таблица заполнина");
         }
 
     private static Boolean isNeedCreateTables() {
@@ -98,10 +92,8 @@ public class DBEngine {
 
             resultSet = metadata.getTables(null, null, "customer", null);
             if (resultSet.next()){
-                System.out.println("Таблица есть");
                 table = false;
             } else {
-                System.out.println("Таблицы нет");
                 table = true;
             }
         } catch (SQLException e) {
@@ -110,14 +102,13 @@ public class DBEngine {
         return table;
     }
 
-    public static Connection closeConnection(){
+    public static void closeConnection(){
         try {
             connection.close();
             System.out.println("База завершила работу");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
 }
