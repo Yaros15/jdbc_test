@@ -41,12 +41,10 @@ public class OrderBrowserPanel extends JPanel {
         ordersListModel.removeElement(selectedValue);
         OrdersDao ordersDelete = new OrdersDao();
         ordersDelete.delete(selectedValue);
-        System.out.println("Order delete");
     }
 
     public void addClickListener(ListSelectionListener listener) {
         ordersJList.addListSelectionListener(listener);
     }
-
 
 }
