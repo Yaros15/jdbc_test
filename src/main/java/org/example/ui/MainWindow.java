@@ -157,7 +157,7 @@ public class MainWindow {
                 }
             }
             if (nameListPanel.equals(ORDER)) {
-                Orders currentOrders = new Orders();
+                Orders currentOrders = orderPanel.getCurrentOrders();
                 if (currentOrders != null) {
                     OrderEditor ordersEditor = new OrderEditor(frame, currentOrders);
                 }

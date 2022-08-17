@@ -14,7 +14,7 @@ public class ProductEditor extends JDialog {
 
     private JTextField nameField, priceField;
 
-    private JButton createButton, updateButton, cancelButton;
+    private JButton okButton, cancelButton;
 
     public ProductEditor (JFrame frame, Product product){
         super(frame, "Редактор продуктов", true);
@@ -43,8 +43,7 @@ public class ProductEditor extends JDialog {
         nameField = new JTextField();
         priceField = new JTextField();
 
-        createButton = new JButton("Создать");
-        updateButton = new JButton("Изменить");
+        okButton = new JButton("Ok");
         cancelButton = new JButton("Закрыть");
 
         JPanel fieldPanel = new JPanel(new GridLayout(2,2,5,5));
@@ -53,9 +52,8 @@ public class ProductEditor extends JDialog {
         fieldPanel.add(priceLabel);
         fieldPanel.add(priceField);
 
-        JPanel buttonsPanel = new JPanel(new GridLayout(1,3,5,5));
-        buttonsPanel.add(createButton);
-        buttonsPanel.add(updateButton);
+        JPanel buttonsPanel = new JPanel(new GridLayout(1,2,5,5));
+        buttonsPanel.add(okButton);
         buttonsPanel.add(cancelButton);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -70,23 +68,21 @@ public class ProductEditor extends JDialog {
             productToEdit.setName(value);
         });
 
-        createButton.addActionListener(e -> {
-            if (e.getSource() == createButton) {
-                productToEdit.setName(nameField.getText());
-                productToEdit.setPrice(Integer.parseInt(priceField.getText()));
-                ProductDao saveProduct = new ProductDao();
-                saveProduct.save(productToEdit);
-                super.dispose();
-            }
-        });
-
-        updateButton.addActionListener(e -> {
-            if (e.getSource() == updateButton){
+        okButton.addActionListener(e-> {
+            if (productToEdit.getId() > 0){
                 productToEdit.setName(nameField.getText());
                 productToEdit.setPrice(Integer.parseInt(priceField.getText()));
                 ProductDao updateProduct = new ProductDao();
                 updateProduct.update(productToEdit);
                 super.dispose();
+                System.out.println("update product");
+            } else {
+                productToEdit.setName(nameField.getText());
+                productToEdit.setPrice(Integer.parseInt(priceField.getText()));
+                ProductDao saveProduct = new ProductDao();
+                saveProduct.save(productToEdit);
+                super.dispose();
+                System.out.println("new save product");
             }
         });
 
