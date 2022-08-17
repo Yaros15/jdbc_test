@@ -14,7 +14,7 @@ public class OrderEditor extends JDialog {
 
     private JTextField customerIdField, productIdField;
 
-    private JButton createButton, updateButton, cancelButton;
+    private JButton okButton, cancelButton;
 
     public OrderEditor (JFrame frame, Orders orders){
         super(frame, "Редактор заказов", true);
@@ -30,6 +30,7 @@ public class OrderEditor extends JDialog {
             productIdField.setText(String.valueOf(productId));
         }
 
+        System.out.println(orders.getId() + " " + orders.getCustomerId() + " " + orders.getProductId());
         super.setBounds(150,150,300,300);
         pack();
         setVisible(true);
@@ -39,14 +40,13 @@ public class OrderEditor extends JDialog {
         JRootPane rootPane = super.createRootPane();
         rootPane.setLayout(new BorderLayout());
 
-        customerIdLabel = new JLabel("id клиента");
-        productIdLabel = new JLabel("id продукта");
+        customerIdLabel = new JLabel("ID клиента");
+        productIdLabel = new JLabel("ID продукта");
 
         customerIdField = new JTextField();
         productIdField = new JTextField();
 
-        createButton = new JButton("Создать");
-        updateButton = new JButton("Изменить");
+        okButton = new JButton("Ok");
         cancelButton = new JButton("Закрыть");
 
         JPanel fieldPanel = new JPanel(new GridLayout(2,2,5,5));
@@ -55,34 +55,31 @@ public class OrderEditor extends JDialog {
         fieldPanel.add(productIdLabel);
         fieldPanel.add(productIdField);
 
-        JPanel buttonsPanel = new JPanel(new GridLayout(1,3,5,5));
-        buttonsPanel.add(createButton);
-        buttonsPanel.add(updateButton);
+        JPanel buttonsPanel = new JPanel(new GridLayout(1,2,5,5));
+        buttonsPanel.add(okButton);
         buttonsPanel.add(cancelButton);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(fieldPanel, BorderLayout.CENTER);
         mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        createButton.addActionListener(e -> {
-            if (e.getSource() == createButton) {
-                ordersToEdit.setCustomerId(Integer.parseInt(customerIdField.getText()));
-                ordersToEdit.setProductId(Integer.parseInt(productIdField.getText()));
-                /*OrdersDao saveOrders = new OrdersDao();
-                saveOrders.save(ordersToEdit);*/
-                System.out.println(ordersToEdit.getCustomerId() + " " + ordersToEdit.getProductId());
-                super.dispose();
-            }
-        });
+        okButton.addActionListener(e -> {
+            if (ordersToEdit.getId() > 0){
 
-        updateButton.addActionListener(e -> {
-            if (e.getSource() == updateButton){
                 ordersToEdit.setCustomerId(Integer.parseInt(customerIdField.getText()));
                 ordersToEdit.setProductId(Integer.parseInt(productIdField.getText()));
-                /*OrdersDao updateOrders = new OrdersDao();
-                updateOrders.update(ordersToEdit);*/
-                System.out.println(ordersToEdit.getCustomerId() + " " + ordersToEdit.getProductId());
+                OrdersDao updateOrders = new OrdersDao();
+                updateOrders.update(ordersToEdit);
                 super.dispose();
+
+            } else {
+
+                ordersToEdit.setCustomerId(Integer.parseInt(customerIdField.getText()));
+                ordersToEdit.setProductId(Integer.parseInt(productIdField.getText()));
+                OrdersDao saveOrders = new OrdersDao();
+                saveOrders.save(ordersToEdit);
+                super.dispose();
+
             }
         });
 
